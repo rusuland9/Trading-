@@ -2,7 +2,7 @@
   "trading": {
     "defaultExchange": "Binance",
     "defaultSymbol": "BTCUSD",
-    "paperTradingMode": true
+    "paperTradingMode": false
   },
   "strategy": {
     "brickSize": 10.0,
