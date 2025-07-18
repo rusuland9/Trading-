@@ -1,0 +1,17 @@
+{
+  "trading": {
+    "defaultExchange": "Binance",
+    "defaultSymbol": "BTCUSD",
+    "paperTradingMode": false
+  },
+  "strategy": {
+    "brickSize": 10.0,
+    "setup1Enabled": true,
+    "setup2Enabled": true,
+    "counterTradingEnabled": false
+  },
+  "risk": {
+    "maxRiskPerTrade": 2.0,
+    "maxDailyRisk": 10.0
+  }
+}
