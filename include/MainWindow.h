@@ -28,22 +28,15 @@
 #include <QMenu>
 #include <QSettings>
 #include <QCloseEvent>
+#include <QChart>
+#include <QChartView>
+#include <QLineSeries>
+#include <QValueAxis>
+#include <QDateTimeAxis>
+#include <QTableWidgetItem>
 #include <memory>
 
-// Forward declarations
-class StrategyEngine;
-class RiskManager;
-class CapitalAllocator;
-class OrderManager;
-class ExchangeConnector;
-class TradeSessionManager;
-class Logger;
-class ConfigManager;
-class PaperTradeFallback;
-class TradingDashboard;
-class PositionWidget;
-class ChartWidget;
-class SettingsDialog;
+QT_CHARTS_USE_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
@@ -59,80 +52,37 @@ protected:
 private slots:
     void onStartTrading();
     void onStopTrading();
-    void onPauseTrading();
-    void onShowSettings();
     void onShowAbout();
-    void onSystemTrayActivated(QSystemTrayIcon::ActivationReason reason);
-    void onExitApplication();
     void onTradingModeChanged();
-    void onStrategyStatusChanged();
-    void onNewTrade();
-    void onPositionUpdated();
-    void onRiskLimitReached();
-    void onConnectionStatusChanged();
-    void onUpdateTimer();
     void onSwitchToPaperTrading();
     void onSwitchToLiveTrading();
-    void onLoadConfiguration();
-    void onSaveConfiguration();
-    void onExportLogs();
-    void onShowChart();
-    void onShowPositions();
-    void onShowLogs();
+    void updateStatusLabels();
+    void simulateTrading();
+    void simulateTradeSignal();
 
 private:
     void setupUI();
     void setupMenuBar();
-    void setupToolBar();
     void setupStatusBar();
-    void setupCentralWidget();
-    void setupDockWidgets();
-    void setupSystemTray();
     void setupConnections();
-    void setupTradingEngine();
-    void setupStyles();
-    void createControlPanel();
-    void createStatusPanel();
-    void createTradingPanel();
-    void createRiskPanel();
-    void updateStatusLabels();
-    void updateTradingStatus();
-    void updateRiskMetrics();
-    void updatePositions();
-    void updateLogs();
-    void loadSettings();
-    void saveSettings();
+    void setupPriceChart();
     void applyTheme();
+    void loadConfiguration();
+    void saveConfiguration();
+    void addTradeToTable(const QString &side, double size, double entryPrice, double pnl, const QString &status);
     
     // UI Components
     QWidget *m_centralWidget;
-    QSplitter *m_mainSplitter;
-    QSplitter *m_leftSplitter;
-    QSplitter *m_rightSplitter;
     QTabWidget *m_centralTabs;
-    QTabWidget *m_rightTabs;
-    
-    // Panels
-    QWidget *m_controlPanel;
-    QWidget *m_statusPanel;
-    QWidget *m_tradingPanel;
-    QWidget *m_riskPanel;
-    QWidget *m_chartPanel;
-    QWidget *m_positionPanel;
-    QWidget *m_logPanel;
     
     // Controls
     QPushButton *m_startButton;
     QPushButton *m_stopButton;
-    QPushButton *m_pauseButton;
-    QPushButton *m_settingsButton;
     QPushButton *m_paperTradingButton;
     QPushButton *m_liveTradingButton;
     
     QComboBox *m_exchangeCombo;
     QComboBox *m_symbolCombo;
-    QComboBox *m_strategyCombo;
-    QComboBox *m_timeframeCombo;
     
     QDoubleSpinBox *m_brickSizeSpinBox;
     QDoubleSpinBox *m_riskPercentSpinBox;
@@ -142,68 +92,39 @@ private:
     QCheckBox *m_setup1CheckBox;
     QCheckBox *m_setup2CheckBox;
     QCheckBox *m_counterTradingCheckBox;
-    QCheckBox *m_paperModeCheckBox;
-    QCheckBox *m_swapAvoidanceCheckBox;
     
     // Status displays
     QLabel *m_connectionStatusLabel;
     QLabel *m_tradingStatusLabel;
-    QLabel *m_strategyStatusLabel;
+    QLabel *m_priceLabel;
     QLabel *m_equityLabel;
-    QLabel *m_pnlLabel;
     QLabel *m_dailyPnlLabel;
-    QLabel *m_riskUsedLabel;
     QLabel *m_openPositionsLabel;
     QLabel *m_winRateLabel;
     QLabel *m_totalTradesLabel;
+    QLabel *m_profitFactorLabel;
+    QLabel *m_riskUsedLabel;
+    QLabel *m_connectionIndicator;
+    QLabel *m_timeLabel;
     
     // Tables and displays
     QTableWidget *m_positionsTable;
-    QTableWidget *m_tradesTable;
-    QTableWidget *m_ordersTable;
     QTextEdit *m_logTextEdit;
-    TradingDashboard *m_dashboard;
-    ChartWidget *m_chartWidget;
-    PositionWidget *m_positionWidget;
     
     // Progress bars
     QProgressBar *m_riskProgressBar;
-    QProgressBar *m_equityProgressBar;
     
-    // Menu and toolbar
-    QMenuBar *m_menuBar;
-    QToolBar *m_toolBar;
-    QStatusBar *m_statusBar;
-    
-    // System tray
-    QSystemTrayIcon *m_systemTray;
-    QMenu *m_trayMenu;
-    
-    // Actions
-    QAction *m_exitAction;
-    QAction *m_settingsAction;
-    QAction *m_aboutAction;
-    QAction *m_startTradingAction;
-    QAction *m_stopTradingAction;
-    QAction *m_pauseTradingAction;
-    QAction *m_paperTradingAction;
-    QAction *m_liveTradingAction;
+    // Chart components
+    QWidget *m_chartWidget;
+    QChart *m_priceChart;
+    QChartView *m_chartView;
+    QLineSeries *m_priceSeries;
+    QValueAxis *m_priceAxis;
+    QDateTimeAxis *m_timeAxis;
     
     // Timers
     QTimer *m_updateTimer;
-    QTimer *m_statusTimer;
-    
-    // Core trading components
-    std::unique_ptr<StrategyEngine> m_strategyEngine;
-    std::unique_ptr<RiskManager> m_riskManager;
-    std::unique_ptr<CapitalAllocator> m_capitalAllocator;
-    std::unique_ptr<OrderManager> m_orderManager;
-    std::unique_ptr<ExchangeConnector> m_exchangeConnector;
-    std::unique_ptr<TradeSessionManager> m_sessionManager;
-    std::unique_ptr<Logger> m_logger;
-    std::unique_ptr<ConfigManager> m_configManager;
-    std::unique_ptr<PaperTradeFallback> m_paperTradeFallback;
-    std::unique_ptr<SettingsDialog> m_settingsDialog;
+    QTimer *m_simulationTimer;
     
     // Application state
     bool m_tradingActive;
@@ -211,15 +132,28 @@ private:
     bool m_paused;
     QString m_currentSymbol;
     QString m_currentExchange;
+    
+    // Trading data
     double m_currentEquity;
-    double m_dailyPnl;
+    double m_dailyPnL;
     int m_openPositions;
     int m_totalTrades;
+    int m_winningTrades;
     double m_winRate;
     double m_riskUsed;
     
-    // Settings
-    QSettings *m_settings;
+    // Risk management
+    double m_maxRiskPerTrade;
+    double m_maxDailyRisk;
+    int m_maxOpenPositions;
+    
+    // Simulation variables
+    double m_currentPrice;
+    int m_priceDirection;
+    int m_simulationCounter;
+    double m_spread;
+    double m_slippage;
+    double m_priceVolatility;
 };
 
 #endif // MAINWINDOW_H 

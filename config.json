@@ -1,0 +1,213 @@
+{
+    "application": {
+        "name": "MasterMind Trader",
+        "version": "1.0.0",
+        "theme": "dark",
+        "autoSave": true,
+        "updateInterval": 1000
+    },
+    "trading": {
+        "defaultExchange": "Binance",
+        "defaultSymbol": "BTCUSD",
+        "defaultStrategy": "MasterMind Renko",
+        "paperTradingMode": true,
+        "autoStart": false
+    },
+    "strategy": {
+        "brickSize": 10.0,
+        "brickUnit": "pips",
+        "tickBuffer": 2,
+        "setup1Enabled": true,
+        "setup2Enabled": true,
+        "counterTradingEnabled": false,
+        "tradesPerCounter": 10,
+        "brickFormationThreshold": 0.75,
+        "stopLossAdjustment": true,
+        "takeProfitRatio": 2.0
+    },
+    "risk": {
+        "maxRiskPerTrade": 2.0,
+        "maxDailyRisk": 10.0,
+        "maxOpenPositions": 5,
+        "maxTradesPerDay": 20,
+        "maxDrawdown": 20.0,
+        "riskUnit": "percent",
+        "emergencyStop": true,
+        "riskWarningLevel": 80.0
+    },
+    "capital": {
+        "totalCapital": 10000.0,
+        "currency": "USD",
+        "allocation": {
+            "BTCUSD": 3000.0,
+            "ETHUSD": 2000.0,
+            "EURUSD": 2000.0,
+            "GBPUSD": 1500.0,
+            "XAUUSD": 1000.0,
+            "USDJPY": 500.0
+        }
+    },
+    "exchanges": {
+        "Binance": {
+            "enabled": true,
+            "testMode": true,
+            "apiKey": "",
+            "apiSecret": "",
+            "baseUrl": "https://api.binance.com",
+            "wsUrl": "wss://stream.binance.com:9443/ws",
+            "maxOrderSize": 1000.0,
+            "minOrderSize": 0.001,
+            "commission": 0.001
+        },
+        "Coinbase": {
+            "enabled": true,
+            "testMode": true,
+            "apiKey": "",
+            "apiSecret": "",
+            "passphrase": "",
+            "baseUrl": "https://api.exchange.coinbase.com",
+            "wsUrl": "wss://ws-feed.exchange.coinbase.com",
+            "maxOrderSize": 1000.0,
+            "minOrderSize": 0.001,
+            "commission": 0.005
+        },
+        "Deribit": {
+            "enabled": true,
+            "testMode": true,
+            "apiKey": "",
+            "apiSecret": "",
+            "baseUrl": "https://www.deribit.com/api/v2",
+            "wsUrl": "wss://www.deribit.com/ws/api/v2",
+            "maxOrderSize": 1000.0,
+            "minOrderSize": 0.001,
+            "commission": 0.0005
+        },
+        "Delta Exchange": {
+            "enabled": true,
+            "testMode": true,
+            "apiKey": "",
+            "apiSecret": "",
+            "baseUrl": "https://api.delta.exchange",
+            "wsUrl": "wss://socket.delta.exchange",
+            "maxOrderSize": 1000.0,
+            "minOrderSize": 0.001,
+            "commission": 0.0005
+        },
+        "MetaTrader 4": {
+            "enabled": false,
+            "testMode": true,
+            "serverAddress": "127.0.0.1",
+            "serverPort": 8222,
+            "account": "",
+            "password": "",
+            "maxOrderSize": 100.0,
+            "minOrderSize": 0.01,
+            "commission": 0.0
+        },
+        "MetaTrader 5": {
+            "enabled": false,
+            "testMode": true,
+            "serverAddress": "127.0.0.1",
+            "serverPort": 8223,
+            "account": "",
+            "password": "",
+            "maxOrderSize": 100.0,
+            "minOrderSize": 0.01,
+            "commission": 0.0
+        }
+    },
+    "sessions": {
+        "enabled": false,
+        "intradayOnly": true,
+        "avoidSwap": true,
+        "london": {
+            "enabled": true,
+            "start": "08:00",
+            "end": "16:00",
+            "timezone": "GMT"
+        },
+        "newyork": {
+            "enabled": true,
+            "start": "13:00",
+            "end": "21:00",
+            "timezone": "GMT"
+        },
+        "tokyo": {
+            "enabled": false,
+            "start": "23:00",
+            "end": "07:00",
+            "timezone": "GMT"
+        },
+        "sydney": {
+            "enabled": false,
+            "start": "21:00",
+            "end": "05:00",
+            "timezone": "GMT"
+        }
+    },
+    "ui": {
+        "theme": "dark",
+        "enableSound": false,
+        "enableNotifications": true,
+        "minimizeToTray": true,
+        "showSplash": true,
+        "confirmExit": true,
+        "autoSaveInterval": 300000,
+        "logLevel": "INFO",
+        "maxLogEntries": 1000
+    },
+    "logging": {
+        "enabled": true,
+        "level": "INFO",
+        "file": "logs/trading.log",
+        "maxFileSize": 10485760,
+        "maxFiles": 5,
+        "console": true,
+        "timestamp": true
+    },
+    "simulation": {
+        "enabled": true,
+        "initialEquity": 10000.0,
+        "spread": 2.0,
+        "slippage": 1.0,
+        "latency": 50,
+        "priceVolatility": 0.001,
+        "trendStrength": 0.5,
+        "newsEvents": false
+    },
+    "alerts": {
+        "enabled": true,
+        "email": {
+            "enabled": false,
+            "smtp": "smtp.gmail.com",
+            "port": 587,
+            "username": "",
+            "password": "",
+            "recipient": ""
+        },
+        "webhook": {
+            "enabled": false,
+            "url": "",
+            "secret": ""
+        },
+        "conditions": {
+            "newTrade": true,
+            "riskLimit": true,
+            "connectionLost": true,
+            "emergencyStop": true,
+            "profitTarget": true,
+            "drawdownLimit": true
+        }
+    },
+    "backtest": {
+        "enabled": false,
+        "dataSource": "binance",
+        "timeframe": "1m",
+        "startDate": "2024-01-01",
+        "endDate": "2024-12-31",
+        "initialCapital": 10000.0,
+        "commission": 0.001,
+        "spread": 2.0,
+        "slippage": 1.0
+    }
+} 
