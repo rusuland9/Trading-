@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\MasterMindTrader.dir/objects.a
+C:\PROGRA~1\W64DEV~1\bin\ar.exe qc CMakeFiles\MasterMindTrader.dir/objects.a @CMakeFiles\MasterMindTrader.dir\objects1.rsp
+C:\PROGRA~1\W64DEV~1\bin\C__~1.EXE -O3 -DNDEBUG -mwindows -Wl,--whole-archive CMakeFiles\MasterMindTrader.dir/objects.a -Wl,--no-whole-archive -o MasterMindTrader.exe -Wl,--out-implib,libMasterMindTrader.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\MasterMindTrader.dir\linkLibs.rsp

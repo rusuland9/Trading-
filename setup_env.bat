@@ -6,18 +6,18 @@ echo =======================================
 set QT_FOUND=0
 
 :: Check common Qt installation paths
-if exist "C:\Qt\6.5.0\mingw_64\bin" (
-    set QTDIR=C:\Qt\6.5.0\mingw_64
+if exist "C:\Qt\6.8.3\mingw_64\bin" (
+    set QTDIR=C:\Qt\6.8.3\mingw_64
     set QT_FOUND=1
-    echo Found Qt 6.5.0 at %QTDIR%
+    echo Found Qt 6.8.3 at %QTDIR%
 ) else if exist "C:\Qt\6.4.0\mingw_64\bin" (
     set QTDIR=C:\Qt\6.4.0\mingw_64
     set QT_FOUND=1
     echo Found Qt 6.4.0 at %QTDIR%
-) else if exist "C:\Qt\5.15.2\mingw81_64\bin" (
-    set QTDIR=C:\Qt\5.15.2\mingw81_64
+) else if exist "C:\Qt\6.8.3\mingw81_64\bin" (
+    set QTDIR=C:\Qt\6.8.3\mingw81_64
     set QT_FOUND=1
-    echo Found Qt 5.15.2 at %QTDIR%
+    echo Found Qt 6.8.3 at %QTDIR%
 ) else (
     echo Warning: Qt installation not found in common locations
     echo Please install Qt from https://www.qt.io/download-open-source
@@ -50,8 +50,8 @@ if %errorlevel% equ 0 (
     echo Found G++ compiler in PATH
 ) else (
     :: Check Qt's MinGW
-    if exist "C:\Qt\Tools\mingw1120_64\bin\g++.exe" (
-        set PATH=C:\Qt\Tools\mingw1120_64\bin;%PATH%
+    if exist "C:\Qt\Tools\mingw1310_64\bin\g++.exe" (
+        set PATH=C:\Qt\Tools\mingw1310_64\bin;%PATH%
         set MINGW_FOUND=1
         echo Found MinGW in Qt tools
     ) else if exist "C:\Qt\Tools\mingw810_64\bin\g++.exe" (

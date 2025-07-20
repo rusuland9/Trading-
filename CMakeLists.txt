@@ -4,10 +4,10 @@ project(MasterMindTrader VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Find Qt6 - fallback to Qt5 if not found
+# Find Qt6 - fallback to Qt6 if not found
 find_package(Qt6 QUIET COMPONENTS Core Widgets Charts Network Sql WebSockets)
 if(NOT Qt6_FOUND)
-    find_package(Qt5 REQUIRED COMPONENTS Core Widgets Charts Network Sql WebSockets)
+    find_package(Qt6 REQUIRED COMPONENTS Core Widgets Charts Network Sql WebSockets)
     set(QT_VERSION_MAJOR 5)
 else()
     set(QT_VERSION_MAJOR 6)
@@ -77,12 +77,12 @@ if(QT_VERSION_MAJOR EQUAL 6)
     )
 else()
     target_link_libraries(MasterMindTrader
-        Qt5::Core
-        Qt5::Widgets
-        Qt5::Charts
-        Qt5::Network
-        Qt5::Sql
-        Qt5::WebSockets
+        Qt6::Core
+        Qt6::Widgets
+        Qt6::Charts
+        Qt6::Network
+        Qt6::Sql
+        Qt6::WebSockets
     )
 endif()
 

@@ -100,7 +100,7 @@ MasterMind Trader/
 - **15 Header Files**: Complete modular architecture
 - **15 Source Files**: Full implementation of all components
 - **CMake Build System**: Cross-platform compilation support
-- **Modern C++17**: Using latest C++ standards and Qt6/Qt5 compatibility
+- **Modern C++17**: Using latest C++ standards and Qt6/Qt6 compatibility
 - **Thread-Safe**: Proper multi-threading with QMutex
 - **Professional UI**: Dark theme with modern styling
 - **Real-time Updates**: 1-second refresh timers for live data
@@ -182,7 +182,7 @@ MasterMind Trader/
 ## 🛠️ Setup and Installation
 
 ### Requirements
-- **C++ Version**: Qt6/Qt5, CMake 3.16+, C++17 compiler
+- **C++ Version**: Qt6/Qt6, CMake 3.16+, C++17 compiler
 - **Python Version**: Python 3.7+, matplotlib, numpy, tkinter
 
 ### Build Process

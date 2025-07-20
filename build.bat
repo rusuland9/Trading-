@@ -13,7 +13,7 @@ cd build
 
 :: Configure with CMake
 echo Configuring project with CMake...
-cmake .. -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release
+cmake .. -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DQt6_DIR="C:/Qt/6.8.3/mingw81_64/lib/cmake/Qt6"
 
 :: Check if CMake configuration was successful
 if %errorlevel% neq 0 (

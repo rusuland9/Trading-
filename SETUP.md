@@ -11,8 +11,8 @@ This guide will help you install all required tools and dependencies to build an
 2. **Run installer**: Download and run the Qt Online Installer
 3. **Login**: Create a free Qt account or login
 4. **Select Components**:
-   - Qt 6.5.0 or later (recommended)
-   - Qt 5.15.2 or later (minimum)
+   - Qt 6.8.3 or later (recommended)
+   - Qt 6.8.3 or later (minimum)
    - **Must include**: Qt Charts, Qt WebSockets, Qt SQL
    - **Compiler**: MinGW 11.2.0 64-bit (Windows) or appropriate for your OS
 5. **Installation Path**: Default is fine (usually `C:\Qt`)
@@ -49,7 +49,7 @@ sudo apt install cmake build-essential
 #### Windows
 **Option A: MinGW (Recommended - comes with Qt)**
 - Already included if you installed Qt with MinGW
-- Path: `C:\Qt\Tools\mingw1120_64\bin`
+- Path: `C:\Qt\Tools\mingw1310_64\bin`
 
 **Option B: Visual Studio**
 1. Download Visual Studio Community (free)
@@ -80,8 +80,8 @@ sudo yum groupinstall "Development Tools"
 ### Windows Environment Variables
 Add these to your system PATH:
 ```
-C:\Qt\6.5.0\mingw_64\bin
-C:\Qt\Tools\mingw1120_64\bin
+C:\Qt\6.8.3\mingw_64\bin
+C:\Qt\Tools\mingw1310_64\bin
 C:\Qt\Tools\CMake_64\bin
 ```
 
@@ -92,12 +92,12 @@ Create `setup_env.bat`:
 echo Setting up MasterMind Trader environment...
 
 :: Add Qt to PATH
-set PATH=C:\Qt\6.5.0\mingw_64\bin;%PATH%
-set PATH=C:\Qt\Tools\mingw1120_64\bin;%PATH%
+set PATH=C:\Qt\6.8.3\mingw_64\bin;%PATH%
+set PATH=C:\Qt\Tools\mingw1310_64\bin;%PATH%
 set PATH=C:\Qt\Tools\CMake_64\bin;%PATH%
 
 :: Set Qt environment variables
-set QTDIR=C:\Qt\6.5.0\mingw_64
+set QTDIR=C:\Qt\6.8.3\mingw_64
 set QT_PLUGIN_PATH=%QTDIR%\plugins
 
 echo Environment setup complete!
@@ -223,8 +223,8 @@ cmake .. -DCMAKE_CXX_COMPILER=g++
 
 #### "Qt6 not found"
 ```bash
-# Use Qt5 instead
-cmake .. -DUSE_QT5=ON
+# Use Qt6 instead
+cmake .. -DUSE_Qt6=ON
 ```
 
 #### "WebSockets not found"
@@ -245,7 +245,7 @@ cmake .. -DDISABLE_WEBSOCKETS=ON
 ```dockerfile
 FROM ubuntu:20.04
 RUN apt-get update && apt-get install -y \
-    qt6-base-dev qt6-charts-dev qt6-websockets-dev \
+    Qt6-base-dev Qt6-charts-dev Qt6-websockets-dev \
     cmake build-essential git
 ```
 
@@ -263,7 +263,7 @@ brew install qt cmake git
 
 #### Linux (APT)
 ```bash
-sudo apt install qt6-base-dev qt6-charts-dev cmake build-essential
+sudo apt install Qt6-base-dev Qt6-charts-dev cmake build-essential
 ```
 
 ## Next Steps
