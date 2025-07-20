@@ -7,6 +7,8 @@
 #include <QTextStream>
 #include <QMutex>
 #include <QDateTime>
+#include <QThread>
+#include <QQueue>
 
 class Logger : public QObject
 {
@@ -24,12 +26,16 @@ public:
     void exportLogs(const QString &filePath);
     
 private:
-    void writeLog(const QString &level, const QString &message);
+    void enqueueLog(const QString &level, const QString &message);
+    void processQueue();
     
     QFile m_logFile;
     QTextStream m_stream;
     QMutex m_mutex;
     bool m_initialized;
+    QThread *m_workerThread;
+    QQueue<QString> m_logQueue;
+    QMutex m_queueMutex;
 };
 
 #endif // LOGGER_H 

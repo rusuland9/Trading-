@@ -14,9 +14,13 @@ public:
     void activatePaperTrading();
     void deactivatePaperTrading();
     bool isPaperTradingActive() const { return m_paperTradingActive; }
+    void notifyTradeResult(bool wasLoss);
+    void resetFallback();
     
 private:
     bool m_paperTradingActive;
+    int m_consecutiveLosses;
+    int m_lossThreshold;
 };
 
 #endif // PAPERTRADEFALLBACK_H 

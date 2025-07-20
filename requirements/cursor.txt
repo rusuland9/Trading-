@@ -1,0 +1,183 @@
+Absolutely — here's a **clear, fully spelled-out version** of the analysis and prompts without using unexplained abbreviations. This is rewritten to be **easy for both Cursor AI and human developers to understand**, with **no shorthand or jargon left ambiguous**:
+
+---
+
+## ✅ What Is This Project For?
+
+This project involves the creation of a **fully automated, rule-based trading system written in the C++ programming language**, designed for **high-frequency trading** across multiple types of financial instruments. The system is intended to run real-money strategies on platforms such as **foreign exchange (Forex), cryptocurrency exchanges, and futures and options markets**. The trading strategy — internally referred to as **“Master Mind”** — is based on a **Renko chart pattern recognition technique**, and its logic is strictly confidential.
+
+The final product will be an advanced C++ software system that can trade with multiple broker platforms, including **cryptocurrency exchanges (like Binance, Delta Exchange, Deribit, and Coinbase)** as well as **Forex brokers that use MetaTrader 4 (MT4) and MetaTrader 5 (MT5)**. It will feature smart risk management, capital control, and automated trading signals that require no human intervention once deployed.
+
+---
+
+## 🔧 System Design and Cursor-AI-Compatible Development Prompts
+
+Here’s a breakdown into **developer-ready system components and instructions**, fully spelled out:
+
+---
+
+### 🧠 1. Strategy Engine (Renko-Based Logic)
+
+**Instruction for Developer:**
+
+> Create a C++ class called `StrategyEngine` that performs the following:
+>
+> * Processes Renko chart data and identifies entry signals based on two primary conditions:
+>
+>   1. **Setup 1:** When two red (bearish) bricks form consecutively, followed by a green (bullish) brick that has formed 75%, place a buy order 2 ticks (user-defined minimum price movement) above the full height of that green brick.
+>   2. **Setup 2:** Recognize three-brick patterns such as green-red-green or red-green-red. Mark the high close and low open of the pattern, and if the price breaks beyond this range with 75% brick formation, initiate a trade 2 ticks above or below the range.
+> * Cancel any pending orders if no confirmation occurs in the next Renko brick.
+> * Automatically adjust the stop loss level once two bricks form in the direction of the trade.
+> * Allow users to enable Setup 1, Setup 2, or both at the same time through a configuration file.
+
+---
+
+### 🏦 2. Risk Management and Position Sizing Logic
+
+**Instruction for Developer:**
+
+> Create a class `RiskManager` that performs all capital protection and lot sizing calculations:
+>
+> * Calculate the maximum number of trades based on total account equity and a user-defined percentage of risk for the day (e.g., 1% or 2%).
+> * Determine the lot size (for example, 0.01 lots in Forex or 1 contract in futures) based on stop loss distance, pip value (or tick value), and risk budget.
+> * Automatically prevent further trading when the daily risk limit has been reached, including all broker fees, spread, and slippage.
+> * Support a feature called "counter trading", where trades are grouped into counters (e.g., 10 trades per group). After each counter finishes, recalculate equity and allow further trading only if capital has increased.
+
+---
+
+### 🧮 3. Capital Allocation Logic
+
+**Instruction for Developer:**
+
+> Implement a component named `CapitalAllocator`:
+>
+> * Allow user to assign specific portions of capital to specific symbols or instruments. For example:
+>
+>   * \$2,000 for EUR/USD
+>   * \$3,000 for BTC/USD
+>   * Remaining capital should not be used unless explicitly configured.
+> * Use JSON or YAML file format to define per-symbol capital assignments and configuration parameters like maximum loss, tick buffer, and trading window.
+
+---
+
+### 📈 4. Charting and Brick Size Logic
+
+**Instruction for Developer:**
+
+> Add support for user-defined Renko brick sizes.
+>
+> * Allow users to specify the Renko brick size manually.
+> * Use real-time tick or candle data to form bricks in memory.
+> * No need to display visuals; internal detection only.
+> * Brick formation logic must follow traditional Renko principles.
+
+---
+
+### 🕒 5. Session Timing Control
+
+**Instruction for Developer:**
+
+> Implement a module `TradeSessionManager` that:
+>
+> * Lets user define specific trading sessions (e.g., only during London session, or Tokyo session).
+> * Allows intraday-only mode (no overnight trades), or swing trades that avoid instruments with high swap fees.
+> * Show estimated swap charges fetched from broker's API for every asset.
+
+---
+
+### 🔁 6. Live Trading vs. Paper Trading Fallback
+
+**Instruction for Developer:**
+
+> Implement `PaperTradeFallback` system:
+>
+> * If the system experiences two losses in a row:
+>
+>   * Stop live trading.
+>   * Simulate trades using the same logic in paper mode.
+>   * Resume live trading automatically when simulated trades show profitable outcomes.
+
+---
+
+### 📑 7. Order Management System (OMS)
+
+**Instruction for Developer:**
+
+> Develop an `OrderManager` module that:
+>
+> * Places different types of orders: stop orders, limit orders, and hybrid orders (combination of iceberg and pegged order).
+> * Automatically adjusts or cancels orders if the next Renko brick invalidates the setup.
+> * Includes a tick buffer value (user-defined) to prevent entering too early.
+> * Moves stop loss to breakeven plus spread/slippage after two favorable bricks.
+> * Reacts quickly in high-volatility markets (especially crypto and Forex).
+
+---
+
+### 🌐 8. Exchange Integration
+
+**Instruction for Developer:**
+
+> Develop `ExchangeConnector` modules with complete API integration for the following platforms:
+>
+> * Cryptocurrency exchanges: Binance, Deribit, Delta Exchange, Coinbase.
+>
+> * Forex brokers: MetaTrader 4 (MT4) and MetaTrader 5 (MT5), either through plugins, APIs, or third-party bridges.
+>
+> * Must support placing, modifying, and canceling orders.
+>
+> * Must support querying balances, available margin, swap rates, and position status.
+
+---
+
+### 📋 9. Trade Audit Logging System
+
+**Instruction for Developer:**
+
+> Create a `Logger` or `AuditTrail` system that:
+>
+> * Records every signal generation, decision by the order manager, API calls and responses (including errors), fills, cancellations, and profit-and-loss snapshots.
+> * Timestamps every event.
+> * Stores logs in a secure, write-protected local database (such as SQLite or MongoDB).
+> * Must be asynchronous so logging does not slow down trading.
+
+---
+
+### 🛠 10. Deployment & Configuration
+
+**Instruction for Developer:**
+
+> Deliver:
+>
+> * Fully working C++ source code with clean modular structure.
+> * Binary files or compiled libraries for deployment.
+> * Configuration interface using JSON or YAML (user can define session times, capital split, strategy selection, tick buffer, etc.).
+> * Complete developer documentation and user guide.
+> * Post-launch support for bug fixes at no additional cost.
+> * Exclusive intellectual property transfer to client.
+
+---
+
+### 🔒 11. Confidential Core Strategy Section (Discussed After NDA)
+
+These elements must **never be shared in public repositories or in the job post**. They include:
+
+* Exact Renko pattern logic
+* Entry and exit rule mechanics
+* Hybrid order structure and fallback conditions
+* Risk-adjusted trade sizing formulas
+* Paper trading validation logic
+* Session filtering using swap calculation
+* Custom counter-based capital reassessment formula
+
+---
+
+### 🚫 Do Not Hire If:
+
+* You plan to copy or reuse the code.
+* You are unfamiliar with high-performance programming in C++.
+* You cannot respect strict confidentiality.
+* You lack experience in real-market order execution, low-latency systems, or trading logic.
+
+---
+
+If you'd like, I can now turn each module into detailed Cursor AI prompts to begin direct coding inside Cursor. Would you like to proceed with that next?

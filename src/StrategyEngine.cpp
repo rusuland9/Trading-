@@ -1,5 +1,6 @@
 #include "StrategyEngine.h"
 #include <QDebug>
+#include <QJsonObject>
 
 StrategyEngine::StrategyEngine(QObject *parent)
     : QObject(parent)
@@ -130,45 +131,127 @@ void StrategyEngine::onValidateSignal()
 
 void StrategyEngine::processPriceData(double price, const QDateTime &timestamp)
 {
-    // Stub implementation
-    Q_UNUSED(price)
-    Q_UNUSED(timestamp)
+    QMutexLocker locker(&m_mutex);
+    m_currentPrice = price;
+    formRenkoBrick(price, timestamp);
 }
 
 void StrategyEngine::formRenkoBrick(double price, const QDateTime &timestamp)
 {
-    // Stub implementation
-    Q_UNUSED(price)
-    Q_UNUSED(timestamp)
+    if (m_renkoBricks.empty()) {
+        RenkoBrick firstBrick;
+        firstBrick.open = price;
+        firstBrick.close = price;
+        firstBrick.high = price;
+        firstBrick.low = price;
+        firstBrick.timestamp = timestamp;
+        firstBrick.isGreen = false;
+        firstBrick.isRed = false;
+        firstBrick.formationPercentage = 0.0;
+        m_renkoBricks.push_back(firstBrick);
+        emit brickFormed(firstBrick);
+        return;
+    }
+    RenkoBrick &lastBrick = m_renkoBricks.back();
+    double diff = price - lastBrick.close;
+    int bricksToForm = static_cast<int>(std::abs(diff) / m_brickSize);
+    if (bricksToForm == 0) return;
+    for (int i = 0; i < bricksToForm; ++i) {
+        RenkoBrick newBrick;
+        newBrick.open = lastBrick.close;
+        if (diff > 0) {
+            newBrick.close = lastBrick.close + m_brickSize;
+            newBrick.isGreen = true;
+            newBrick.isRed = false;
+        } else {
+            newBrick.close = lastBrick.close - m_brickSize;
+            newBrick.isGreen = false;
+            newBrick.isRed = true;
+        }
+        newBrick.high = std::max(newBrick.open, newBrick.close);
+        newBrick.low = std::min(newBrick.open, newBrick.close);
+        newBrick.timestamp = timestamp;
+        newBrick.formationPercentage = 1.0;
+        m_renkoBricks.push_back(newBrick);
+        if (m_renkoBricks.size() > MAX_BRICK_HISTORY) {
+            m_renkoBricks.erase(m_renkoBricks.begin());
+        }
+        emit brickFormed(newBrick);
+        analyzeRenkoPattern();
+    }
 }
 
 void StrategyEngine::analyzeRenkoPattern()
 {
-    // Stub implementation
+    TradingSignal signal;
+    if (m_setup1Enabled && detectTwoRedOneGreen()) {
+        signal = analyzeSetup1();
+    } else if (m_setup2Enabled && detectThreeBrickPattern()) {
+        signal = analyzeSetup2();
+    } else {
+        return;
+    }
+    if (signal.isValid && validateSignal(signal)) {
+        m_lastSignal = signal;
+        m_signalHistory.push_back(signal);
+        if (m_signalHistory.size() > MAX_SIGNAL_HISTORY) {
+            m_signalHistory.erase(m_signalHistory.begin());
+        }
+        ++m_totalSignals;
+        emit newSignal(signal);
+        logSignal(signal);
+    }
+}
+
+bool StrategyEngine::detectTwoRedOneGreen()
+{
+    if (m_renkoBricks.size() < 3) return false;
+    const RenkoBrick &b1 = m_renkoBricks[m_renkoBricks.size() - 3];
+    const RenkoBrick &b2 = m_renkoBricks[m_renkoBricks.size() - 2];
+    const RenkoBrick &b3 = m_renkoBricks[m_renkoBricks.size() - 1];
+    return b1.isRed && b2.isRed && b3.isGreen;
+}
+
+bool StrategyEngine::detectThreeBrickPattern()
+{
+    if (m_renkoBricks.size() < 3) return false;
+    // Example: three consecutive green bricks
+    const RenkoBrick &b1 = m_renkoBricks[m_renkoBricks.size() - 3];
+    const RenkoBrick &b2 = m_renkoBricks[m_renkoBricks.size() - 2];
+    const RenkoBrick &b3 = m_renkoBricks[m_renkoBricks.size() - 1];
+    return b1.isGreen && b2.isGreen && b3.isGreen;
 }
 
 TradingSignal StrategyEngine::analyzeSetup1()
 {
     TradingSignal signal;
-    signal.isValid = false;
+    signal.setup = TradingSignal::SETUP1;
+    signal.symbol = m_symbol;
+    signal.timestamp = QDateTime::currentDateTime();
+    signal.type = TradingSignal::BUY;
+    signal.price = m_renkoBricks.back().close;
+    signal.lotSize = calculateLotSize(signal);
+    signal.stopLoss = calculateStopLoss(signal);
+    signal.takeProfit = calculateTakeProfit(signal);
+    signal.isValid = true;
+    signal.description = "Setup1: Two red, one green pattern detected.";
     return signal;
-}
-
-bool StrategyEngine::detectTwoRedOneGreen()
-{
-    return false;
 }
 
 TradingSignal StrategyEngine::analyzeSetup2()
 {
     TradingSignal signal;
-    signal.isValid = false;
+    signal.setup = TradingSignal::SETUP2;
+    signal.symbol = m_symbol;
+    signal.timestamp = QDateTime::currentDateTime();
+    signal.type = TradingSignal::BUY;
+    signal.price = m_renkoBricks.back().close;
+    signal.lotSize = calculateLotSize(signal);
+    signal.stopLoss = calculateStopLoss(signal);
+    signal.takeProfit = calculateTakeProfit(signal);
+    signal.isValid = true;
+    signal.description = "Setup2: Three green bricks pattern detected.";
     return signal;
-}
-
-bool StrategyEngine::detectThreeBrickPattern()
-{
-    return false;
 }
 
 bool StrategyEngine::validateSignal(const TradingSignal &signal)
@@ -179,20 +262,27 @@ bool StrategyEngine::validateSignal(const TradingSignal &signal)
 
 double StrategyEngine::calculateLotSize(const TradingSignal &signal)
 {
-    Q_UNUSED(signal)
-    return 0.01; // Default lot size
+    // Standard risk management: risk a fixed percent of account per trade
+    // Lot size = (AccountSize * RiskPercent) / (StopLoss in price units)
+    double accountSize = 10000.0; // Example fixed account size, should be loaded from config
+    double riskAmount = accountSize * (m_riskPercent / 100.0);
+    double stopLoss = calculateStopLoss(signal);
+    if (stopLoss <= 0.0) return 0.01; // fallback
+    double lotSize = riskAmount / stopLoss;
+    if (lotSize < 0.01) lotSize = 0.01;
+    return lotSize;
 }
 
 double StrategyEngine::calculateStopLoss(const TradingSignal &signal)
 {
-    Q_UNUSED(signal)
-    return 0.0;
+    // Standard: stop loss = brick size * 2 (for Renko reversal)
+    return m_brickSize * 2;
 }
 
 double StrategyEngine::calculateTakeProfit(const TradingSignal &signal)
 {
-    Q_UNUSED(signal)
-    return 0.0;
+    // Standard: take profit = brick size * 3 (risk:reward 1:1.5)
+    return m_brickSize * 3;
 }
 
 bool StrategyEngine::isGreenBrick(const RenkoBrick &brick) const
@@ -221,4 +311,23 @@ void StrategyEngine::logSignal(const TradingSignal &signal)
 {
     Q_UNUSED(signal)
     // Stub implementation
+}
+
+void StrategyEngine::loadConfig(const QJsonObject &config)
+{
+    if (config.contains("strategy")) {
+        QJsonObject strat = config["strategy"].toObject();
+        if (strat.contains("brickSize")) setBrickSize(strat["brickSize"].toDouble());
+        if (strat.contains("tickBuffer")) setTickBuffer(strat["tickBuffer"].toInt());
+        if (strat.contains("setup1Enabled")) setSetup1Enabled(strat["setup1Enabled"].toBool());
+        if (strat.contains("setup2Enabled")) setSetup2Enabled(strat["setup2Enabled"].toBool());
+    }
+    if (config.contains("trading")) {
+        QJsonObject trading = config["trading"].toObject();
+        if (trading.contains("defaultSymbol")) setSymbol(trading["defaultSymbol"].toString());
+    }
+    if (config.contains("risk")) {
+        QJsonObject risk = config["risk"].toObject();
+        if (risk.contains("maxRiskPerTrade")) setRiskPercent(risk["maxRiskPerTrade"].toDouble());
+    }
 } 

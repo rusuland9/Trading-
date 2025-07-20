@@ -1,4 +1,5 @@
 #include "RiskManager.h"
+#include <QJsonObject>
 
 RiskManager::RiskManager(QObject *parent)
     : QObject(parent)
@@ -33,6 +34,22 @@ RiskManager::RiskManager(QObject *parent)
 RiskManager::~RiskManager()
 {
     // Clean up
+}
+
+void RiskManager::loadConfig(const QJsonObject &config)
+{
+    if (config.contains("risk")) {
+        QJsonObject risk = config["risk"].toObject();
+        if (risk.contains("maxRiskPerTrade")) setMaxRiskPerTrade(risk["maxRiskPerTrade"].toDouble());
+        if (risk.contains("maxDailyRisk")) setMaxDailyRisk(risk["maxDailyRisk"].toDouble());
+        if (risk.contains("maxOpenPositions")) setMaxOpenPositions(risk["maxOpenPositions"].toInt());
+        if (risk.contains("maxTradesPerDay")) setMaxTradesPerDay(risk["maxTradesPerDay"].toInt());
+        if (risk.contains("maxDrawdown")) setMaxDrawdown(risk["maxDrawdown"].toDouble());
+    }
+    if (config.contains("capital")) {
+        QJsonObject capital = config["capital"].toObject();
+        if (capital.contains("totalCapital")) setEquity(capital["totalCapital"].toDouble());
+    }
 }
 
 void RiskManager::setMaxRiskPerTrade(double percent)
@@ -83,34 +100,17 @@ void RiskManager::setTradesPerCounter(int count)
     m_tradesPerCounter = count;
 }
 
-bool RiskManager::canOpenPosition(const QString &symbol, double lotSize)
-{
-    Q_UNUSED(symbol)
-    Q_UNUSED(lotSize)
-    
-    QMutexLocker locker(&m_mutex);
-    
-    // Check if we have reached max positions
-    if (m_openPositions.size() >= static_cast<size_t>(m_maxOpenPositions)) {
-        return false;
-    }
-    
-    // Check if we have reached max daily trades
-    if (m_dailyTradeCount >= m_maxTradesPerDay) {
-        return false;
-    }
-    
-    return true;
-}
-
 double RiskManager::calculateLotSize(const QString &symbol, double stopLossPips, double riskPercent)
 {
-    Q_UNUSED(symbol)
-    Q_UNUSED(stopLossPips)
-    Q_UNUSED(riskPercent)
-    
-    // Stub implementation
-    return 0.01;
+    QMutexLocker locker(&m_mutex);
+    // Standard risk: Lot size = (Equity * Risk%) / (StopLoss in price units)
+    double riskAmount = m_equity * (riskPercent / 100.0);
+    if (stopLossPips <= 0.0) return 0.01;
+    double lotSize = riskAmount / stopLossPips;
+    if (lotSize < 0.01) lotSize = 0.01;
+    double maxLot = calculateMaxLotSize(symbol);
+    if (lotSize > maxLot) lotSize = maxLot;
+    return lotSize;
 }
 
 double RiskManager::calculateMaxLotSize(const QString &symbol)
@@ -123,18 +123,49 @@ double RiskManager::calculateMaxLotSize(const QString &symbol)
 
 bool RiskManager::shouldClosePosition(const QString &positionId)
 {
-    Q_UNUSED(positionId)
-    
-    // Stub implementation
+    QMutexLocker locker(&m_mutex);
+    // Close if drawdown or daily risk exceeded
+    if (isDailyRiskExceeded() || isDrawdownExceeded()) return true;
+    // Optionally, close if unrealized loss exceeds risk per trade
+    auto it = m_positionMap.find(positionId);
+    if (it != m_positionMap.end()) {
+        const Position &pos = it->second;
+        double maxRisk = m_equity * (m_maxRiskPerTrade / 100.0);
+        if (std::abs(pos.unrealizedPnL) > maxRisk) return true;
+    }
     return false;
 }
 
 bool RiskManager::isRiskAcceptable(double lotSize, double stopLossPips)
 {
-    Q_UNUSED(lotSize)
-    Q_UNUSED(stopLossPips)
-    
-    // Stub implementation
+    QMutexLocker locker(&m_mutex);
+    // Check if this trade would exceed max risk per trade or daily risk
+    double riskAmount = lotSize * stopLossPips;
+    double maxRisk = m_equity * (m_maxRiskPerTrade / 100.0);
+    if (riskAmount > maxRisk) return false;
+    double dailyRiskLimit = m_equity * (m_maxDailyRisk / 100.0);
+    if ((std::abs(m_dailyPnL) + riskAmount) > dailyRiskLimit) return false;
+    return true;
+}
+
+bool RiskManager::canOpenPosition(const QString &symbol, double lotSize)
+{
+    QMutexLocker locker(&m_mutex);
+    // Check open positions
+    if (m_openPositions.size() >= static_cast<size_t>(m_maxOpenPositions)) return false;
+    // Check daily trade count
+    if (m_dailyTradeCount >= m_maxTradesPerDay) return false;
+    // Check daily risk
+    double dailyRiskLimit = m_equity * (m_maxDailyRisk / 100.0);
+    if (std::abs(m_dailyPnL) >= dailyRiskLimit) return false;
+    // Check drawdown
+    double drawdownLimit = m_initialEquity * (m_maxDrawdownPercent / 100.0);
+    if (m_maxDrawdown >= drawdownLimit) return false;
+    // Check risk per trade
+    double maxRisk = m_equity * (m_maxRiskPerTrade / 100.0);
+    if ((lotSize * 10.0) > maxRisk) return false; // Assume 10 price units as default stop loss if not provided
+    // Counter trading logic
+    if (m_counterTradingEnabled && m_currentCounterTrades >= m_tradesPerCounter) return false;
     return true;
 }
 

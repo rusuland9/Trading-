@@ -79,27 +79,49 @@ MarketData ExchangeConnector::getMarketData(const QString &symbol) const
 
 QString ExchangeConnector::placeOrder(const OrderRequest &request)
 {
-    Q_UNUSED(request)
-    QString orderId = QString("ORDER_%1").arg(QDateTime::currentMSecsSinceEpoch());
-    
-    // Simulate order placement
-    QTimer::singleShot(1000, [this, orderId]() {
-        OrderResponse response;
-        response.orderId = orderId;
-        response.status = OrderStatus::FILLED;
-        response.filledQuantity = 1.0;
-        response.averagePrice = 50000.0;
-        response.timestamp = QDateTime::currentDateTime();
-        emit orderFilled(response);
-    });
-    
-    return orderId;
+    if (m_testMode) {
+        // Simulate order placement
+        QString orderId = QString("ORDER_%1").arg(QDateTime::currentMSecsSinceEpoch());
+        QTimer::singleShot(1000, [this, orderId]() {
+            OrderResponse response;
+            response.orderId = orderId;
+            response.status = OrderStatus::FILLED;
+            response.filledQuantity = 1.0;
+            response.averagePrice = 50000.0;
+            response.timestamp = QDateTime::currentDateTime();
+            emit orderFilled(response);
+        });
+        return orderId;
+    }
+    // Route to exchange-specific implementation
+    switch (m_currentExchange) {
+        case ExchangeType::BINANCE:
+            return binancePlaceOrder(request);
+        case ExchangeType::COINBASE:
+            return coinbasePlaceOrder(request);
+        case ExchangeType::DERIBIT:
+            return deribitPlaceOrder(request);
+        case ExchangeType::DELTA_EXCHANGE:
+            return deltaPlaceOrder(request);
+        case ExchangeType::METATRADER4:
+            return metatraderPlaceOrder(request);
+        case ExchangeType::METATRADER5:
+            return metatraderPlaceOrder(request);
+        default:
+            emit errorOccurred("Unsupported exchange");
+            return "";
+    }
 }
 
 bool ExchangeConnector::cancelOrder(const QString &orderId)
 {
-    emit orderCancelled(orderId);
-    return true;
+    if (m_testMode) {
+        emit orderCancelled(orderId);
+        return true;
+    }
+    // TODO: Route to exchange-specific cancel logic
+    emit errorOccurred("Cancel order not implemented for this exchange");
+    return false;
 }
 
 bool ExchangeConnector::modifyOrder(const QString &orderId, double newPrice, double newQuantity)
@@ -112,10 +134,17 @@ bool ExchangeConnector::modifyOrder(const QString &orderId, double newPrice, dou
 
 OrderResponse ExchangeConnector::getOrderStatus(const QString &orderId)
 {
-    Q_UNUSED(orderId)
+    if (m_testMode) {
+        OrderResponse response;
+        response.orderId = orderId;
+        response.status = OrderStatus::FILLED;
+        return response;
+    }
+    // TODO: Route to exchange-specific status logic
     OrderResponse response;
     response.orderId = orderId;
-    response.status = OrderStatus::FILLED;
+    response.status = OrderStatus::PENDING;
+    emit errorOccurred("Get order status not implemented for this exchange");
     return response;
 }
 
@@ -134,16 +163,35 @@ std::vector<OrderResponse> ExchangeConnector::getOrderHistory(const QString &sym
 
 AccountInfo ExchangeConnector::getAccountInfo()
 {
-    AccountInfo info;
-    info.totalBalance = 10000.0;
-    info.availableBalance = 8000.0;
-    info.usedMargin = 2000.0;
-    info.freeMargin = 8000.0;
-    info.marginLevel = 400.0;
-    info.equity = 10000.0;
-    info.currency = "USD";
-    info.lastUpdate = QDateTime::currentDateTime();
-    return info;
+    if (m_testMode) {
+        AccountInfo info;
+        info.totalBalance = 10000.0;
+        info.availableBalance = 8000.0;
+        info.usedMargin = 2000.0;
+        info.freeMargin = 8000.0;
+        info.marginLevel = 400.0;
+        info.equity = 10000.0;
+        info.currency = "USD";
+        info.lastUpdate = QDateTime::currentDateTime();
+        return info;
+    }
+    switch (m_currentExchange) {
+        case ExchangeType::BINANCE:
+            return binanceGetAccountInfo();
+        case ExchangeType::COINBASE:
+            return coinbaseGetAccountInfo();
+        case ExchangeType::DERIBIT:
+            return deribitGetAccountInfo();
+        case ExchangeType::DELTA_EXCHANGE:
+            return deltaGetAccountInfo();
+        case ExchangeType::METATRADER4:
+            return metatraderGetAccountInfo();
+        case ExchangeType::METATRADER5:
+            return metatraderGetAccountInfo();
+        default:
+            emit errorOccurred("Unsupported exchange");
+            return AccountInfo();
+    }
 }
 
 std::vector<Position> ExchangeConnector::getPositions(const QString &symbol)

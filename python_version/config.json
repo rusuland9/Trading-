@@ -1,7 +1,7 @@
 {
   "trading": {
-    "defaultExchange": "MetaTrader 5",
-    "defaultSymbol": "EURUSD",
+    "defaultExchange": "Binance",
+    "defaultSymbol": "ETHUSD",
     "paperTradingMode": false
   },
   "strategy": {
