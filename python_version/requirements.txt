@@ -1,9 +1,29 @@
-matplotlib>=3.5.0
-numpy>=1.21.0
-tkinter-tooltip>=2.0.0
+# MasterMind Trader - Python Version Dependencies
+# ==================================================
+# This file should match requirements/python_requirements.txt
 
-# Optional: For more advanced features
-pandas>=1.3.0
-requests>=2.25.0
-websocket-client>=1.0.0
-python-json-logger>=2.0.0 
+# Core GUI Framework
+matplotlib>=3.5.0,<4.0.0
+numpy>=1.21.0,<2.0.0
+
+# Optional: Enhanced tooltip support
+# tkinter-tooltip>=2.0.0,<3.0.0
+
+# Data Processing & Analysis
+pandas>=1.3.0,<3.0.0
+
+# Network & API Communication (for live trading)
+requests>=2.25.0,<3.0.0
+websocket-client>=1.0.0,<2.0.0
+
+# JSON & Configuration
+python-json-logger>=2.0.0,<3.0.0
+
+# Date/Time Handling
+python-dateutil>=2.8.0,<3.0.0
+
+# Note: tkinter comes with Python by default
+# If you get "No module named tkinter", reinstall Python from python.org
+
+# Installation command:
+# pip install -r requirements.txt 

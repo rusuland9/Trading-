@@ -1,0 +1,41 @@
+# MasterMind Trader - Python Version Dependencies
+# ==================================================
+
+# Core GUI Framework
+matplotlib>=3.5.0,<4.0.0
+numpy>=1.21.0,<2.0.0
+tkinter-tooltip>=2.0.0,<3.0.0
+
+# Data Processing & Analysis
+pandas>=1.3.0,<3.0.0
+
+# Network & API Communication
+requests>=2.25.0,<3.0.0
+websocket-client>=1.0.0,<2.0.0
+urllib3>=1.26.0,<3.0.0
+
+# JSON & Configuration
+python-json-logger>=2.0.0,<3.0.0
+
+# Date/Time Handling
+python-dateutil>=2.8.0,<3.0.0
+
+# Optional: Enhanced Features
+# scipy>=1.7.0,<2.0.0  # For advanced mathematical functions
+# pillow>=8.0.0,<11.0.0  # For image processing (splash screens, icons)
+
+# Development & Testing (optional)
+# pytest>=6.0.0,<8.0.0
+# pytest-cov>=2.0.0,<5.0.0
+# black>=21.0.0,<24.0.0  # Code formatting
+# flake8>=3.9.0,<8.0.0  # Code linting
+
+# System Requirements:
+# - Python 3.7 or higher
+# - Operating System: Windows, macOS, or Linux
+# - RAM: Minimum 2GB (4GB recommended)
+# - Storage: 100MB free space
+# - Network: Internet connection for live trading
+
+# Installation Instructions:
+# pip install -r requirements/python_requirements.txt 

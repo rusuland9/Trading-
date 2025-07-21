@@ -1,0 +1,45 @@
+# MasterMind Trader - C++ Dependencies
+# ==================================================
+
+# Core Framework
+Qt6 >= 6.2.0
+# Required Qt Modules:
+# - Qt6Core
+# - Qt6Widgets  
+# - Qt6Charts
+# - Qt6Network
+# - Qt6Sql
+# - Qt6WebSockets
+# - Qt6OpenGL
+# - Qt6OpenGLWidgets
+
+# Build Tools
+CMake >= 3.16.0
+C++17 compatible compiler (GCC 7+, Clang 9+, MSVC 2019+)
+
+# Platform-specific Compilers:
+# Windows: MinGW 11.2.0+ OR Visual Studio 2019+
+# macOS: Xcode Command Line Tools
+# Linux: GCC 7+ development packages
+
+# Optional Tools
+Git >= 2.20.0 (for version control)
+Ninja (optional build system)
+
+# Exchange API Libraries (for live trading)
+libcurl >= 7.70.0 (HTTP requests)
+OpenSSL >= 1.1.1 (secure connections)
+WebSocket++ >= 0.8.2 (WebSocket connections)
+
+# JSON Processing
+RapidJSON >= 1.1.0 (fast JSON parsing)
+
+# System Requirements
+# - Operating System: Windows 10/11, macOS 10.14+, or Linux
+# - RAM: Minimum 4GB (8GB recommended)
+# - Storage: 500MB free space
+# - Network: Internet connection for live trading
+
+# Development Environment
+Qt Creator >= 6.0 (recommended IDE)
+Visual Studio Code with C++ extensions (alternative IDE) 

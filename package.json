@@ -1,0 +1,94 @@
+{
+  "name": "mastermind-trader",
+  "version": "1.0.0",
+  "description": "Professional High-Frequency Trading System with Renko Pattern Recognition",
+  "author": "MasterMind Trading Systems",
+  "license": "Proprietary",
+  "homepage": "https://github.com/mastermind/trader",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mastermind/trader.git"
+  },
+  "keywords": [
+    "trading",
+    "forex",
+    "cryptocurrency",
+    "high-frequency-trading",
+    "renko-charts",
+    "qt",
+    "cpp",
+    "python",
+    "automated-trading"
+  ],
+  "engines": {
+    "node": ">=14.0.0",
+    "python": ">=3.7.0"
+  },
+  "os": [
+    "win32",
+    "darwin",
+    "linux"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ],
+  "scripts": {
+    "build": "cmake --build build --config Release",
+    "build:debug": "cmake --build build --config Debug",
+    "configure": "cmake -B build",
+    "clean": "cmake --build build --target clean",
+    "test": "cd build && ctest",
+    "install": "cmake --install build",
+    "setup:cpp": "./setup_env.bat",
+    "setup:python": "pip install -r requirements/python_requirements.txt",
+    "start:python": "cd python_version && python mastermind_trader.py",
+    "start:cpp": "./build/MasterMindTrader",
+    "docs": "doxygen Doxyfile",
+    "format": "clang-format -i src/*.cpp include/*.h",
+    "lint": "cppcheck src/ include/"
+  },
+  "config": {
+    "qt_version": "6.8.3",
+    "cmake_version": "3.16.0",
+    "cpp_standard": "17"
+  },
+  "dependencies": {
+    "qt6": ">=6.2.0",
+    "cmake": ">=3.16.0"
+  },
+  "devDependencies": {
+    "clang-format": ">=12.0.0",
+    "cppcheck": ">=2.0.0",
+    "doxygen": ">=1.9.0"
+  },
+  "files": [
+    "src/",
+    "include/",
+    "requirements/",
+    "python_version/",
+    "CMakeLists.txt",
+    "config.json",
+    "README.md",
+    "SETUP.md",
+    "PROJECT_SUMMARY.md"
+  ],
+  "directories": {
+    "lib": "./src",
+    "bin": "./build",
+    "doc": "./docs",
+    "test": "./tests"
+  },
+  "bugs": {
+    "url": "https://github.com/mastermind/trader/issues"
+  },
+  "funding": {
+    "type": "private",
+    "url": "https://mastermindtrader.com/funding"
+  },
+  "private": true,
+  "preferGlobal": false,
+  "publishConfig": {
+    "registry": "https://npm.internal.company.com/"
+  }
+} 
