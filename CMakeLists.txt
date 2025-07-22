@@ -4,14 +4,8 @@ project(MasterMindTrader VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Find Qt6 - fallback to Qt6 if not found
-find_package(Qt6 QUIET COMPONENTS Core Widgets Charts Network Sql WebSockets)
-if(NOT Qt6_FOUND)
-    find_package(Qt6 REQUIRED COMPONENTS Core Widgets Charts Network Sql WebSockets)
-    set(QT_VERSION_MAJOR 5)
-else()
-    set(QT_VERSION_MAJOR 6)
-endif()
+# Find Qt6 components
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Charts Network Sql WebSockets)
 
 # Qt settings
 set(CMAKE_AUTOMOC ON)
@@ -66,25 +60,14 @@ set(SOURCES
 add_executable(MasterMindTrader ${SOURCES} ${HEADERS})
 
 # Link Qt libraries
-if(QT_VERSION_MAJOR EQUAL 6)
-    target_link_libraries(MasterMindTrader
-        Qt6::Core
-        Qt6::Widgets
-        Qt6::Charts
-        Qt6::Network
-        Qt6::Sql
-        Qt6::WebSockets
-    )
-else()
-    target_link_libraries(MasterMindTrader
-        Qt6::Core
-        Qt6::Widgets
-        Qt6::Charts
-        Qt6::Network
-        Qt6::Sql
-        Qt6::WebSockets
-    )
-endif()
+target_link_libraries(MasterMindTrader
+    Qt6::Core
+    Qt6::Widgets
+    Qt6::Charts
+    Qt6::Network
+    Qt6::Sql
+    Qt6::WebSockets
+)
 
 # Set target properties
 set_target_properties(MasterMindTrader PROPERTIES

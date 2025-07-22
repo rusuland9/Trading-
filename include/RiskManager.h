@@ -183,10 +183,10 @@ private:
     mutable QMutex m_mutex;
     
     // Constants
-    static const double DEFAULT_MAX_RISK_PER_TRADE = 2.0; // 2%
-    static const double DEFAULT_MAX_DAILY_RISK = 10.0; // 10%
+    static constexpr double DEFAULT_MAX_RISK_PER_TRADE = 2.0; // 2%
+    static constexpr double DEFAULT_MAX_DAILY_RISK = 10.0; // 10%
     static const int DEFAULT_MAX_OPEN_POSITIONS = 5;
-    static const double DEFAULT_MAX_DRAWDOWN = 20.0; // 20%
+    static constexpr double DEFAULT_MAX_DRAWDOWN = 20.0; // 20%
     static const int DEFAULT_MAX_TRADES_PER_DAY = 20;
     static const int DEFAULT_TRADES_PER_COUNTER = 10;
     

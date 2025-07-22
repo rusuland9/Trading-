@@ -36,6 +36,10 @@
 #include <QTableWidgetItem>
 #include <memory>
 
+#ifndef QT_CHARTS_USE_NAMESPACE
+#define QT_CHARTS_USE_NAMESPACE
+#endif
+
 QT_CHARTS_USE_NAMESPACE
 
 class MainWindow : public QMainWindow

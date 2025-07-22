@@ -149,9 +149,9 @@ private:
     // Configuration
     static const int MAX_BRICK_HISTORY = 100;
     static const int MAX_SIGNAL_HISTORY = 500;
-    static const double MIN_BRICK_SIZE = 0.1;
-    static const double MAX_BRICK_SIZE = 1000.0;
-    static const double BRICK_FORMATION_THRESHOLD = 0.75; // 75%
+    static constexpr double MIN_BRICK_SIZE = 0.1;
+    static constexpr double MAX_BRICK_SIZE = 1000.0;
+    static constexpr double BRICK_FORMATION_THRESHOLD = 0.75; // 75%
 };
 
 #endif // STRATEGYENGINE_H 

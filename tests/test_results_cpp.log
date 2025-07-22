@@ -1,0 +1,29 @@
+MasterMind Trader C++ Testing Report 
+Date: Tue 07/22/2025 14:37:47.84 
+================================================== 
+ 
+System Information: 
+OS Name:                       Microsoft Windows Server 2025 Standard
+Processor(s):                  1 Processor(s) Installed.
+Total Physical Memory:         18,431 MB
+ 
+[FAIL] Qt not found in PATH 
+[FAIL] CMake not found 
+[FAIL] No C++ compiler found 
+ 
+[FAIL] CMake configuration failed 
+CMake Error Log: 
+'cmake' is not recognized as an internal or external command,
+operable program or batch file.
+[FAIL] Build failed 
+Build Error Log: 
+'cmake' is not recognized as an internal or external command,
+operable program or batch file.
+[FAIL] Executable not found 
+[FAIL] Cannot test runtime - executable not found 
+Project Structure: 
+[PASS] README.md exists 
+ 
+================================================== 
+Test completed at: Tue 07/22/2025 14:38:02.88 
+================================================== 

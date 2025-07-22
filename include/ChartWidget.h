@@ -12,6 +12,10 @@
 #include <QComboBox>
 #include <QPushButton>
 
+#ifndef QT_CHARTS_USE_NAMESPACE
+#define QT_CHARTS_USE_NAMESPACE
+#endif
+
 QT_CHARTS_USE_NAMESPACE
 
 class ChartWidget : public QWidget

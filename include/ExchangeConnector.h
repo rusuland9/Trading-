@@ -16,6 +16,9 @@
 #include <memory>
 #include <map>
 
+// Forward declaration to avoid circular includes
+struct Position;
+
 enum class ExchangeType {
     BINANCE,
     COINBASE,
