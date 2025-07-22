@@ -16,8 +16,8 @@
 #include <memory>
 #include <map>
 
-// Forward declaration to avoid circular includes
-struct Position;
+// Include RiskManager.h to get Position struct definition
+#include "RiskManager.h"
 
 enum class ExchangeType {
     BINANCE,

@@ -22,11 +22,16 @@
 #include <QHeaderView>
 #include <memory>
 
-#ifndef QT_CHARTS_USE_NAMESPACE
-#define QT_CHARTS_USE_NAMESPACE
-#endif
-
-QT_CHARTS_USE_NAMESPACE
+// Forward declare Qt Charts classes
+QT_BEGIN_NAMESPACE
+class QChart;
+class QChartView;
+class QLineSeries;
+class QValueAxis;
+class QDateTimeAxis;
+class QAreaSeries;
+class QLegend;
+QT_END_NAMESPACE
 
 struct DashboardMetrics {
     double totalEquity;

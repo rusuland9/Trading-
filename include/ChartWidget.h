@@ -12,11 +12,14 @@
 #include <QComboBox>
 #include <QPushButton>
 
-#ifndef QT_CHARTS_USE_NAMESPACE
-#define QT_CHARTS_USE_NAMESPACE
-#endif
-
-QT_CHARTS_USE_NAMESPACE
+// Forward declare Qt Charts classes
+QT_BEGIN_NAMESPACE
+class QChart;
+class QChartView;
+class QLineSeries;
+class QValueAxis;
+class QDateTimeAxis;
+QT_END_NAMESPACE
 
 class ChartWidget : public QWidget
 {
