@@ -10,19 +10,20 @@
 #include <QPushButton>
 #include <QFrame>
 #include <QTimer>
-#include <QChart>
-#include <QChartView>
-#include <QLineSeries>
-#include <QValueAxis>
-#include <QDateTimeAxis>
-#include <QAreaSeries>
-#include <QLegend>
+// #include <QChart>
+// #include <QChartView>
+// #include <QLineSeries>
+// #include <QValueAxis>
+// #include <QDateTimeAxis>
+// #include <QAreaSeries>
+// #include <QLegend>
 #include <QGroupBox>
 #include <QTableWidget>
 #include <QHeaderView>
 #include <memory>
 
-// Forward declare Qt Charts classes
+// Forward declare Qt Charts classes - temporarily disabled
+/*
 QT_BEGIN_NAMESPACE
 class QChart;
 class QChartView;
@@ -32,6 +33,7 @@ class QDateTimeAxis;
 class QAreaSeries;
 class QLegend;
 QT_END_NAMESPACE
+*/
 
 struct DashboardMetrics {
     double totalEquity;
@@ -139,25 +141,25 @@ private:
     
     // Charts
     QGroupBox *m_chartsGroup;
-    QChart *m_equityChart;
-    QChartView *m_equityChartView;
-    QLineSeries *m_equitySeries;
-    QAreaSeries *m_equityAreaSeries;
-    QValueAxis *m_equityValueAxis;
-    QDateTimeAxis *m_equityDateAxis;
+    // QChart *m_equityChart;
+    // QChartView *m_equityChartView;
+    // QLineSeries *m_equitySeries;
+    // QAreaSeries *m_equityAreaSeries;
+    // QValueAxis *m_equityValueAxis;
+    // QDateTimeAxis *m_equityDateAxis;
     
-    QChart *m_pnlChart;
-    QChartView *m_pnlChartView;
-    QLineSeries *m_pnlSeries;
-    QValueAxis *m_pnlValueAxis;
-    QDateTimeAxis *m_pnlDateAxis;
+    // QChart *m_pnlChart;
+    // QChartView *m_pnlChartView;
+    // QLineSeries *m_pnlSeries;
+    // QValueAxis *m_pnlValueAxis;
+    // QDateTimeAxis *m_pnlDateAxis;
     
-    QChart *m_drawdownChart;
-    QChartView *m_drawdownChartView;
-    QLineSeries *m_drawdownSeries;
-    QAreaSeries *m_drawdownAreaSeries;
-    QValueAxis *m_drawdownValueAxis;
-    QDateTimeAxis *m_drawdownDateAxis;
+    // QChart *m_drawdownChart;
+    // QChartView *m_drawdownChartView;
+    // QLineSeries *m_drawdownSeries;
+    // QAreaSeries *m_drawdownAreaSeries;
+    // QValueAxis *m_drawdownValueAxis;
+    // QDateTimeAxis *m_drawdownDateAxis;
     
     // Recent trades table
     QGroupBox *m_tradesGroup;

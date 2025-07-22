@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Find Qt6 components
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets Charts Network Sql WebSockets)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Network Sql WebSockets)
 
 # Qt settings
 set(CMAKE_AUTOMOC ON)
@@ -63,7 +63,6 @@ add_executable(MasterMindTrader ${SOURCES} ${HEADERS})
 target_link_libraries(MasterMindTrader
     Qt6::Core
     Qt6::Widgets
-    Qt6::Charts
     Qt6::Network
     Qt6::Sql
     Qt6::WebSockets

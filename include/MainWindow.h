@@ -28,15 +28,16 @@
 #include <QMenu>
 #include <QSettings>
 #include <QCloseEvent>
-#include <QChart>
-#include <QChartView>
-#include <QLineSeries>
-#include <QValueAxis>
-#include <QDateTimeAxis>
+// #include <QChart>
+// #include <QChartView>
+// #include <QLineSeries>
+// #include <QValueAxis>
+// #include <QDateTimeAxis>
 #include <QTableWidgetItem>
 #include <memory>
 
-// Forward declare Qt Charts classes
+// Forward declare Qt Charts classes - temporarily disabled
+/*
 QT_BEGIN_NAMESPACE
 class QChart;
 class QChartView;
@@ -44,6 +45,7 @@ class QLineSeries;
 class QValueAxis;
 class QDateTimeAxis;
 QT_END_NAMESPACE
+*/
 
 class MainWindow : public QMainWindow
 {
@@ -123,11 +125,11 @@ private:
     
     // Chart components
     QWidget *m_chartWidget;
-    QChart *m_priceChart;
-    QChartView *m_chartView;
-    QLineSeries *m_priceSeries;
-    QValueAxis *m_priceAxis;
-    QDateTimeAxis *m_timeAxis;
+    // QChart *m_priceChart;
+    // QChartView *m_chartView;
+    // QLineSeries *m_priceSeries;
+    // QValueAxis *m_priceAxis;
+    // QDateTimeAxis *m_timeAxis;
     
     // Timers
     QTimer *m_updateTimer;
